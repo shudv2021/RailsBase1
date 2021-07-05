@@ -1,0 +1,126 @@
+#request without parametrs 
+***************************************************
+dmitry@mark1:~$ ncat -C httpbin.org 80
+GET http://httpbin.org/anything HTTP/1.1
+Host: httpbin.org
+HTTP/1.1 200 OK
+Date: Mon, 05 Jul 2021 09:17:15 GMT
+Content-Type: application/json
+Content-Length: 287
+Connection: keep-alive
+Server: gunicorn/19.9.0
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Credentials: true
+
+{
+  "args": {}, 
+  "data": "", 
+  "files": {}, 
+  "form": {}, 
+  "headers": {
+    "Host": "httpbin.org", 
+    "X-Amzn-Trace-Id": "Root=1-60e2ce1b-30d2c9ec01076289639d1095"
+  }, 
+  "json": null, 
+  "method": "GET", 
+  "origin": "45.157.213.228", 
+  "url": "http://httpbin.org/anything"
+}
+*****************************************************************
+
+#request with parametr 
+*****************************************************************
+dmitry@mark1:~$ ncat -C httpbin.org 80
+GET page1http://httpbin.org/anything?val=1 HTTP/1.1
+Host: httpbin.org
+Accept: text/html
+
+HTTP/1.1 200 OK
+Date: Mon, 05 Jul 2021 13:32:26 GMT
+Content-Type: application/json
+Content-Length: 339
+Connection: keep-alive
+Server: gunicorn/19.9.0
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Credentials: true
+
+{
+  "args": {
+    "val": "1"
+  }, 
+  "data": "", 
+  "files": {}, 
+  "form": {}, 
+  "headers": {
+    "Accept": "text/html", 
+    "Host": "httpbin.org", 
+    "X-Amzn-Trace-Id": "Root=1-60e309ea-178492e334db05c643db15b4"
+  }, 
+  "json": null, 
+  "method": "GET", 
+  "origin": "45.157.213.228", 
+  "url": "http://httpbin.org/anything?val=1"
+}
+******************************************************
+
+
+#Post request
+****************************************************
+dmitry@mark1:~$ ncat -C httpbin.org 80
+POST http://httpbin.org/anything HTTP/1.1
+Host: httpbin.org
+Content-Length: 9
+Accept: text
+
+123456789
+HTTP/1.1 200 OK
+Date: Mon, 05 Jul 2021 13:38:23 GMT
+Content-Type: application/json
+Content-Length: 353
+Connection: keep-alive
+Server: gunicorn/19.9.0
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Credentials: true
+
+{
+  "args": {}, 
+  "data": "123456789", 
+  "files": {}, 
+  "form": {}, 
+  "headers": {
+    "Accept": "text", 
+    "Content-Length": "9", 
+    "Host": "httpbin.org", 
+    "X-Amzn-Trace-Id": "Root=1-60e30b4f-26e2e82749bf502e30feab3b"
+  }, 
+  "json": 123456789, 
+  "method": "POST", 
+  "origin": "45.157.213.228", 
+  "url": "http://httpbin.org/anything"
+}
+**********************************************
+
+
+
+2.Методы:
+-GET - Посылает запрос на получение данных
+-HEAD - посылает запрос на получение только заголовков
+-POST - Создает ресурс на удаленном сервере
+-PUT - Обновляет весь обьект
+-PUTCH - обновляет часть обьекта
+-DELETE - Удаляет удаленный обьект
+-OPTIONS - Запрашивает доступные возможности у сервера
+
+
+3. Заголовки
+Accept (client)- Сообшает серверу тип разыскиваемой информации
+Content-Type (client/server) - сообщает опоненту какой формат пересылаемой информации
+Connection(server) - сообщает состояние канала keep-alive/close
+User-Agent(client) - Сообщает серверу информацию о себе(версия по, система...)
+Content-Length (client/server) сообщает длинну отправленного сообщения в байтах
+
+
+echo -en "GET http://httpbin.org/anything HTTP/1.1\r\nHost: httpbin.org\r\n\r\n" | ncat -C httpbin.org 80 - Не работает
+
+#запрос яндекса 80 порту
+echo -en "GET / HTTP/1.1\r\nHost: yandex.ru\r\n\r\n" | ncat -C yandex.ru 80 /444 - Работает
